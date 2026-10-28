@@ -1,4 +1,4 @@
-import { Collection, Db, ObjectId } from "mongodb";
+import { Collection, ObjectId } from "mongodb";
 import dbConnect from "@/lib/db/mongodb";
 
 export type SubscriptionStatus =

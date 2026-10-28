@@ -1,4 +1,4 @@
-import { Collection, Db, ObjectId } from "mongodb";
+import { Collection, ObjectId } from "mongodb";
 import dbConnect from "@/lib/db/mongodb";
 
 export type UserRole = "visitor" | "free_customer" | "paid_customer";
@@ -8,6 +8,7 @@ export interface User {
   email?: string;
   role: UserRole;
   name?: string;
+  passwordHash?: string;
   createdAt: Date;
   updatedAt: Date;
 }
