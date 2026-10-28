@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import {
   FileText,
@@ -6,12 +9,85 @@ import {
   MessageSquare,
   Sparkles,
   Copy,
+  Check,
   ArrowRight,
   Layers,
   Clock,
   Layout,
+  RotateCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+type ToolType = "summarize" | "rewrite" | "simplify" | "social";
+
+interface ToolContent {
+  label: string;
+  badge: string;
+  inputText: string;
+  inputNote: string;
+  summaryTitle: string;
+  summaryPoints: string[];
+  footerTag: string;
+}
+
+const TOOL_DATA: Record<ToolType, ToolContent> = {
+  summarize: {
+    label: "Summarize",
+    badge: "Team update",
+    inputText:
+      "We're introducing a weekly planning session to help our team stay aligned. Every Monday, we'll spend 20 minutes reviewing priorities, identifying blockers, and agreeing on next steps. Please add your updates to the shared document before the meeting so we can focus on decisions rather than status reports. We'll try this format for four weeks, then gather feedback and adjust.",
+    inputNote: "Paste it. Refine it.",
+    summaryTitle: "A more focused start to the week.",
+    summaryPoints: [
+      "Meet every Monday for 20 minutes to align priorities, discuss blockers, and decide next steps.",
+      "Add updates to the shared document beforehand to keep meetings decision-focused.",
+      "Trial the format for four weeks, then use team feedback to improve it.",
+    ],
+    footerTag: "Summarize · Key points",
+  },
+  rewrite: {
+    label: "Rewrite",
+    badge: "Polish draft",
+    inputText:
+      "Our squad is kicking off a weekly sync so everybody is on the same page. On Mondays for 20 mins, we check what to do first, see what's stuck, and lock in the next plan. Make sure you write your notes into the shared doc before we start so we don't waste time on updates.",
+    inputNote: "Same idea, better flow.",
+    summaryTitle: "A clear, compelling revision.",
+    summaryPoints: [
+      "Keep everyone synchronized with a disciplined 20-minute Monday kickoff.",
+      "Shift the conversation from passive reporting to active decision-making.",
+      "Iterate on feedback after the first month to fine-tune the cadence.",
+    ],
+    footerTag: "Rewrite · Polished copy",
+  },
+  simplify: {
+    label: "Simplify",
+    badge: "Plain language",
+    inputText:
+      "To optimize organizational synergy and streamline operational velocity, we are instituting a synchronous recurring weekly rendezvous. Team constituents must asynchronously populate the collaborative artifact prior to convening.",
+    inputNote: "Plain words, please.",
+    summaryTitle: "Clear, direct, and jargon-free.",
+    summaryPoints: [
+      "We're starting a quick weekly team meeting every Monday.",
+      "It will last 20 minutes to review goals and solve problems together.",
+      "Write your notes in the shared doc before we meet.",
+    ],
+    footerTag: "Simplify · Plain language",
+  },
+  social: {
+    label: "Social Post",
+    badge: "Audience ready",
+    inputText:
+      "We cut our status meetings down from an hour to a 20-minute weekly alignment session. Everyone adds notes before we meet, and we only talk about decisions and blockers. Productivity and team morale are noticeably higher.",
+    inputNote: "Ready for the feed.",
+    summaryTitle: "Ready-to-publish social update.",
+    summaryPoints: [
+      "Ditch 60-minute status meetings. Try a focused 20-minute decision sync instead.",
+      "Read beforehand, align on blockers during the call, and execute faster.",
+      "Great teams protect focus time. Less meeting fatigue, more impact.",
+    ],
+    footerTag: "Social Post · Social-ready post",
+  },
+};
 
 function LogoIcon() {
   return (
@@ -34,20 +110,87 @@ function LogoIcon() {
 }
 
 export default function Home() {
+  const [activeTool, setActiveTool] = useState<ToolType>("summarize");
+  const [inputText, setInputText] = useState<string>(TOOL_DATA.summarize.inputText);
+  const [outputData, setOutputData] = useState<{
+    title: string;
+    points: string[];
+    footerTag: string;
+  }>({
+    title: TOOL_DATA.summarize.summaryTitle,
+    points: TOOL_DATA.summarize.summaryPoints,
+    footerTag: TOOL_DATA.summarize.footerTag,
+  });
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [copied, setCopied] = useState<boolean>(false);
+
+  const handleSelectTool = (tool: ToolType) => {
+    setActiveTool(tool);
+    const data = TOOL_DATA[tool];
+    setInputText(data.inputText);
+    setOutputData({
+      title: data.summaryTitle,
+      points: data.summaryPoints,
+      footerTag: data.footerTag,
+    });
+    setCopied(false);
+  };
+
+  const handleGenerate = () => {
+    setIsGenerating(true);
+    setCopied(false);
+    setTimeout(() => {
+      const data = TOOL_DATA[activeTool];
+      // Deterministically format output based on current input text or tool default
+      const trimmed = inputText.trim();
+      if (!trimmed) {
+        setOutputData({
+          title: "Please add your text to begin.",
+          points: [
+            "Paste or write a rough draft into the editor on the left.",
+            "Choose a tool from the tabs above to transform your copy.",
+            "Click Generate to see your structured preview here.",
+          ],
+          footerTag: `${data.label} · Ready`,
+        });
+      } else {
+        setOutputData({
+          title: data.summaryTitle,
+          points: data.summaryPoints,
+          footerTag: data.footerTag,
+        });
+      }
+      setIsGenerating(false);
+    }, 450);
+  };
+
+  const handleCopy = async () => {
+    const textToCopy = `${outputData.title}\n\n${outputData.points.map((p) => `• ${p}`).join("\n")}`;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(textToCopy);
+      }
+    } catch {
+      // Fallback if clipboard API is restricted
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
-    <div className="min-h-screen bg-[#FAFAF8] text-[#1A1A1A] font-sans selection:bg-neutral-200">
+    <div className="min-h-screen bg-[#FAFAF8] text-[#1A1A1A] font-sans selection:bg-neutral-200 scroll-smooth">
       {/* Navigation */}
       <header className="sticky top-0 z-50 w-full bg-[#FAFAF8]/90 backdrop-blur-sm border-b border-[#E7E5E0]">
         <div className="max-w-6xl mx-auto px-6 h-16 sm:h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <Link href="#workspace" className="flex items-center gap-3 group">
             <LogoIcon />
             <span className="font-semibold text-lg tracking-tight text-[#1A1A1A]">
               ContentCraft AI
             </span>
-          </div>
+          </Link>
 
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#6B6B66]">
-            <Link href="#product" className="hover:text-black transition-colors">
+            <Link href="#workspace" className="hover:text-black transition-colors">
               Product
             </Link>
             <Link href="#features" className="hover:text-black transition-colors">
@@ -59,24 +202,18 @@ export default function Home() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <Link
-              href="#signin"
-              className="hidden sm:inline-block text-sm font-medium text-[#6B6B66] hover:text-black transition-colors"
-            >
-              Sign In
-            </Link>
             <Button
               asChild
               className="bg-[#2B2D2A] hover:bg-black text-white text-xs sm:text-sm font-medium px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg shadow-sm transition-all"
             >
-              <Link href="#get-started">Get Started</Link>
+              <Link href="#workspace">Get Started</Link>
             </Button>
           </div>
         </div>
 
         {/* Mobile Sub-Navigation Links */}
         <div className="flex md:hidden items-center justify-around py-2.5 px-4 border-t border-[#E7E5E0]/60 text-xs font-medium text-[#6B6B66]">
-          <Link href="#product" className="hover:text-black">
+          <Link href="#workspace" className="hover:text-black">
             Product
           </Link>
           <Link href="#features" className="hover:text-black">
@@ -84,9 +221,6 @@ export default function Home() {
           </Link>
           <Link href="#how-it-works" className="hover:text-black">
             How It Works
-          </Link>
-          <Link href="#signin" className="hover:text-black">
-            Sign In
           </Link>
         </div>
       </header>
@@ -116,7 +250,7 @@ export default function Home() {
             asChild
             className="w-full sm:w-auto bg-[#2B2D2A] hover:bg-black text-white px-6 py-6 rounded-xl font-medium text-sm flex items-center justify-center gap-2 group shadow-sm"
           >
-            <Link href="#try">
+            <Link href="#workspace">
               Try ContentCraft
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
@@ -127,12 +261,12 @@ export default function Home() {
             variant="outline"
             className="w-full sm:w-auto border-[#DCDAD5] bg-white hover:bg-[#F5F5F3] text-[#2B2D2A] px-6 py-6 rounded-xl font-medium text-sm shadow-none"
           >
-            <Link href="#explore">Explore Features</Link>
+            <Link href="#features">Explore Features</Link>
           </Button>
         </div>
 
         {/* Interactive / Visual Workspace Preview */}
-        <div className="mt-14 max-w-4xl mx-auto text-left">
+        <div id="workspace" className="mt-14 max-w-4xl mx-auto text-left scroll-mt-28">
           <div className="bg-white rounded-2xl border border-[#E7E5E0] shadow-sm overflow-hidden p-4 sm:p-7">
             {/* Workspace Header */}
             <div className="flex items-center justify-between pb-4 border-b border-[#F0EFEA] mb-5">
@@ -140,7 +274,7 @@ export default function Home() {
                 The writing workspace
               </span>
               <span className="text-[11px] font-semibold tracking-wider text-[#A09F99] uppercase">
-                Example Preview
+                Interactive Preview
               </span>
             </div>
 
@@ -148,28 +282,48 @@ export default function Home() {
             <div className="bg-[#F5F5F3] p-1.5 rounded-xl grid grid-cols-2 sm:grid-cols-4 gap-1 mb-6 text-xs font-medium text-[#6B6B66]">
               <button
                 type="button"
-                className="flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-white text-[#1A1A1A] font-semibold shadow-xs"
+                onClick={() => handleSelectTool("summarize")}
+                className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg transition-all ${
+                  activeTool === "summarize"
+                    ? "bg-white text-[#1A1A1A] font-semibold shadow-xs"
+                    : "hover:text-[#1A1A1A]"
+                }`}
               >
                 <FileText className="w-3.5 h-3.5" />
                 Summarize
               </button>
               <button
                 type="button"
-                className="flex items-center justify-center gap-2 py-2 px-3 rounded-lg hover:text-[#1A1A1A] transition-colors"
+                onClick={() => handleSelectTool("rewrite")}
+                className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg transition-all ${
+                  activeTool === "rewrite"
+                    ? "bg-white text-[#1A1A1A] font-semibold shadow-xs"
+                    : "hover:text-[#1A1A1A]"
+                }`}
               >
                 <PenTool className="w-3.5 h-3.5" />
                 Rewrite
               </button>
               <button
                 type="button"
-                className="flex items-center justify-center gap-2 py-2 px-3 rounded-lg hover:text-[#1A1A1A] transition-colors"
+                onClick={() => handleSelectTool("simplify")}
+                className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg transition-all ${
+                  activeTool === "simplify"
+                    ? "bg-white text-[#1A1A1A] font-semibold shadow-xs"
+                    : "hover:text-[#1A1A1A]"
+                }`}
               >
                 <Sliders className="w-3.5 h-3.5" />
                 Simplify
               </button>
               <button
                 type="button"
-                className="flex items-center justify-center gap-2 py-2 px-3 rounded-lg hover:text-[#1A1A1A] transition-colors"
+                onClick={() => handleSelectTool("social")}
+                className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg transition-all ${
+                  activeTool === "social"
+                    ? "bg-white text-[#1A1A1A] font-semibold shadow-xs"
+                    : "hover:text-[#1A1A1A]"
+                }`}
               >
                 <MessageSquare className="w-3.5 h-3.5" />
                 Social Post
@@ -186,30 +340,39 @@ export default function Home() {
                       Your text
                     </span>
                     <span className="text-[11px] text-[#A09F99]">
-                      Team update
+                      {TOOL_DATA[activeTool].badge}
                     </span>
                   </div>
-                  <p className="text-xs leading-relaxed text-[#4A4B46]">
-                    We&apos;re introducing a weekly planning session to help our
-                    team stay aligned. Every Monday, we&apos;ll spend 20 minutes
-                    reviewing priorities, identifying blockers, and agreeing on
-                    next steps. Please add your updates to the shared document
-                    before the meeting so we can focus on decisions rather than
-                    status reports. We&apos;ll try this format for four weeks,
-                    then gather feedback and adjust.
-                  </p>
+                  <textarea
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
+                    rows={7}
+                    className="w-full text-xs leading-relaxed text-[#4A4B46] resize-none border-none outline-none focus:ring-0 p-0 bg-transparent"
+                    placeholder="Enter or paste your text here..."
+                  />
                 </div>
 
                 <div className="pt-4 flex items-center justify-between border-t border-[#F5F5F3] mt-6">
                   <span className="text-[11px] text-[#A09F99]">
-                    Paste it. Refine it.
+                    {TOOL_DATA[activeTool].inputNote}
                   </span>
                   <button
                     type="button"
-                    className="flex items-center gap-1.5 bg-[#2B2D2A] hover:bg-black text-white text-xs font-medium px-4 py-2 rounded-lg transition-colors"
+                    onClick={handleGenerate}
+                    disabled={isGenerating}
+                    className="flex items-center gap-1.5 bg-[#2B2D2A] hover:bg-black text-white text-xs font-medium px-4 py-2 rounded-lg transition-colors disabled:opacity-75 cursor-pointer"
                   >
-                    Generate
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    {isGenerating ? (
+                      <>
+                        Processing
+                        <RotateCw className="w-3.5 h-3.5 animate-spin" />
+                      </>
+                    ) : (
+                      <>
+                        Generate
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
@@ -224,44 +387,39 @@ export default function Home() {
                     </div>
                     <button
                       type="button"
-                      className="flex items-center gap-1 text-[11px] text-[#6B6B66] hover:text-black transition-colors font-medium"
+                      onClick={handleCopy}
+                      className="flex items-center gap-1 text-[11px] text-[#6B6B66] hover:text-black transition-colors font-medium cursor-pointer"
                     >
-                      <Copy className="w-3 h-3" />
-                      Copy
+                      {copied ? (
+                        <>
+                          <Check className="w-3 h-3 text-emerald-600" />
+                          <span className="text-emerald-700 font-semibold">Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3" />
+                          Copy
+                        </>
+                      )}
                     </button>
                   </div>
 
                   <h3 className="text-xs font-semibold text-[#1A1A1A] mb-3">
-                    A more focused start to the week.
+                    {outputData.title}
                   </h3>
 
                   <ul className="space-y-3 text-xs text-[#3E403C]">
-                    <li className="flex items-start gap-2">
-                      <span className="text-[#3E403C] mt-0.5">•</span>
-                      <span>
-                        Meet every Monday for 20 minutes to align priorities,
-                        discuss blockers, and decide next steps.
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-[#3E403C] mt-0.5">•</span>
-                      <span>
-                        Add updates to the shared document beforehand to keep
-                        meetings decision-focused.
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-[#3E403C] mt-0.5">•</span>
-                      <span>
-                        Trial the format for four weeks, then use team feedback
-                        to improve it.
-                      </span>
-                    </li>
+                    {outputData.points.map((point, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <span className="text-[#3E403C] mt-0.5">•</span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
                   </ul>
                 </div>
 
                 <div className="pt-4 border-t border-[#E2E8DF] text-[11px] text-[#7A7E76] mt-6">
-                  Summarize · Key points
+                  {outputData.footerTag}
                 </div>
               </div>
             </div>
@@ -274,7 +432,7 @@ export default function Home() {
       </section>
 
       {/* The Toolkit Section */}
-      <section id="features" className="py-20 px-6 max-w-6xl mx-auto border-t border-[#EFEFED]">
+      <section id="features" className="py-20 px-6 max-w-6xl mx-auto border-t border-[#EFEFED] scroll-mt-20">
         <div className="mb-12">
           <span className="text-xs font-bold tracking-wider text-[#8A8983] uppercase block mb-3">
             The Toolkit
@@ -290,9 +448,16 @@ export default function Home() {
         {/* 4 Feature Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Card 1: Summarize */}
-          <div className="bg-white border border-[#E7E5E0] rounded-2xl p-6 flex flex-col justify-between shadow-xs hover:border-[#CDCBC5] transition-all">
+          <div
+            onClick={() => {
+              handleSelectTool("summarize");
+              const el = document.getElementById("workspace");
+              el?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="bg-white border border-[#E7E5E0] rounded-2xl p-6 flex flex-col justify-between shadow-xs hover:border-[#CDCBC5] transition-all cursor-pointer group"
+          >
             <div>
-              <div className="w-10 h-10 rounded-xl bg-[#F4F4F2] flex items-center justify-center text-[#2B2D2A] mb-5">
+              <div className="w-10 h-10 rounded-xl bg-[#F4F4F2] flex items-center justify-center text-[#2B2D2A] mb-5 group-hover:bg-[#EFEFED] transition-colors">
                 <FileText className="w-5 h-5 text-[#5C5C57]" />
               </div>
               <h3 className="text-lg font-bold text-[#1A1A1A] mb-2">Summarize</h3>
@@ -316,9 +481,16 @@ export default function Home() {
           </div>
 
           {/* Card 2: Rewrite */}
-          <div className="bg-white border border-[#E7E5E0] rounded-2xl p-6 flex flex-col justify-between shadow-xs hover:border-[#CDCBC5] transition-all">
+          <div
+            onClick={() => {
+              handleSelectTool("rewrite");
+              const el = document.getElementById("workspace");
+              el?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="bg-white border border-[#E7E5E0] rounded-2xl p-6 flex flex-col justify-between shadow-xs hover:border-[#CDCBC5] transition-all cursor-pointer group"
+          >
             <div>
-              <div className="w-10 h-10 rounded-xl bg-[#F4F4F2] flex items-center justify-center text-[#2B2D2A] mb-5">
+              <div className="w-10 h-10 rounded-xl bg-[#F4F4F2] flex items-center justify-center text-[#2B2D2A] mb-5 group-hover:bg-[#EFEFED] transition-colors">
                 <PenTool className="w-5 h-5 text-[#5C5C57]" />
               </div>
               <h3 className="text-lg font-bold text-[#1A1A1A] mb-2">Rewrite</h3>
@@ -342,9 +514,16 @@ export default function Home() {
           </div>
 
           {/* Card 3: Simplify */}
-          <div className="bg-white border border-[#E7E5E0] rounded-2xl p-6 flex flex-col justify-between shadow-xs hover:border-[#CDCBC5] transition-all">
+          <div
+            onClick={() => {
+              handleSelectTool("simplify");
+              const el = document.getElementById("workspace");
+              el?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="bg-white border border-[#E7E5E0] rounded-2xl p-6 flex flex-col justify-between shadow-xs hover:border-[#CDCBC5] transition-all cursor-pointer group"
+          >
             <div>
-              <div className="w-10 h-10 rounded-xl bg-[#F4F4F2] flex items-center justify-center text-[#2B2D2A] mb-5">
+              <div className="w-10 h-10 rounded-xl bg-[#F4F4F2] flex items-center justify-center text-[#2B2D2A] mb-5 group-hover:bg-[#EFEFED] transition-colors">
                 <Sliders className="w-5 h-5 text-[#5C5C57]" />
               </div>
               <h3 className="text-lg font-bold text-[#1A1A1A] mb-2">Simplify</h3>
@@ -368,9 +547,16 @@ export default function Home() {
           </div>
 
           {/* Card 4: Social Post */}
-          <div className="bg-white border border-[#E7E5E0] rounded-2xl p-6 flex flex-col justify-between shadow-xs hover:border-[#CDCBC5] transition-all">
+          <div
+            onClick={() => {
+              handleSelectTool("social");
+              const el = document.getElementById("workspace");
+              el?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="bg-white border border-[#E7E5E0] rounded-2xl p-6 flex flex-col justify-between shadow-xs hover:border-[#CDCBC5] transition-all cursor-pointer group"
+          >
             <div>
-              <div className="w-10 h-10 rounded-xl bg-[#F4F4F2] flex items-center justify-center text-[#2B2D2A] mb-5">
+              <div className="w-10 h-10 rounded-xl bg-[#F4F4F2] flex items-center justify-center text-[#2B2D2A] mb-5 group-hover:bg-[#EFEFED] transition-colors">
                 <MessageSquare className="w-5 h-5 text-[#5C5C57]" />
               </div>
               <h3 className="text-lg font-bold text-[#1A1A1A] mb-2">Social Post</h3>
@@ -395,7 +581,7 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-20 px-6 max-w-6xl mx-auto border-t border-[#EFEFED]">
+      <section id="how-it-works" className="py-20 px-6 max-w-6xl mx-auto border-t border-[#EFEFED] scroll-mt-20">
         <div className="mb-14">
           <span className="text-xs font-bold tracking-wider text-[#8A8983] uppercase block mb-3">
             How It Works
@@ -526,7 +712,7 @@ export default function Home() {
             asChild
             className="bg-[#2B2D2A] hover:bg-black text-white px-7 py-6 rounded-xl font-medium text-sm inline-flex items-center gap-2 group shadow-sm"
           >
-            <Link href="#get-started">
+            <Link href="#workspace">
               Get Started
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
@@ -537,28 +723,22 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-[#E7E5E0] bg-[#FAFAF8] py-12 px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
+          <Link href="#workspace" className="flex items-center gap-3 group">
             <LogoIcon />
             <span className="font-semibold text-base tracking-tight text-[#1A1A1A]">
               ContentCraft AI
             </span>
-          </div>
+          </Link>
 
           <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-[#6B6B66] font-medium">
-            <Link href="#product" className="hover:text-black transition-colors">
+            <Link href="#workspace" className="hover:text-black transition-colors">
               Product
             </Link>
             <Link href="#features" className="hover:text-black transition-colors">
               Features
             </Link>
-            <Link href="#signin" className="hover:text-black transition-colors">
-              Sign In
-            </Link>
-            <Link href="#privacy" className="hover:text-black transition-colors">
-              Privacy
-            </Link>
-            <Link href="#terms" className="hover:text-black transition-colors">
-              Terms
+            <Link href="#how-it-works" className="hover:text-black transition-colors">
+              How It Works
             </Link>
           </div>
         </div>
