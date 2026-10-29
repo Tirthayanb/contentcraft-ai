@@ -8,6 +8,8 @@ if (!MONGODB_URI) {
   );
 }
 
+const MONGODB_DB_NAME = process.env.MONGODB_DB_NAME || "contentcraft_ai_dev";
+
 interface MongoCache {
   client: MongoClient | null;
   db: Db | null;
@@ -34,7 +36,7 @@ async function dbConnect() {
       maxPoolSize: 10,
     });
     cached!.promise = client.connect().then((connectedClient) => {
-      const db = connectedClient.db();
+      const db = connectedClient.db(MONGODB_DB_NAME);
       return { client: connectedClient, db };
     });
   }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { signupSchema } from "@/lib/auth/validation";
 import { hashPassword } from "@/lib/auth/password";
-import { createUser, findUserByEmail } from "@/models/User";
+import { createUser, findUserByEmail, toSafeUser } from "@/models/User";
 import { signSession, getSessionCookieName } from "@/lib/auth/session";
 
 export async function POST(req: NextRequest) {
@@ -9,7 +9,10 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const parsed = signupSchema.safeParse(body);
     if (!parsed.success) {
-      return NextResponse.json({ error: "Invalid input", details: parsed.error.flatten() }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid input", details: parsed.error.flatten() },
+        { status: 400 }
+      );
     }
 
     const { email, password, name } = parsed.data;
@@ -19,15 +22,21 @@ export async function POST(req: NextRequest) {
     }
 
     const passwordHash = await hashPassword(password);
+    // New signups strictly receive customer role and inactive subscription
     const user = await createUser({
       email,
       name,
       passwordHash,
-      role: "free_customer",
     });
 
-    const token = signSession({ userId: user._id!.toString(), email: user.email, role: user.role });
-    const res = NextResponse.json({ user: { id: user._id, email: user.email, role: user.role, name: user.name } }, { status: 201 });
+    const token = signSession({
+      userId: user._id!.toString(),
+      email: user.email,
+      role: user.role,
+    });
+
+    const safeUser = toSafeUser(user as unknown as Record<string, unknown>);
+    const res = NextResponse.json({ user: safeUser }, { status: 201 });
     res.cookies.set(getSessionCookieName(), token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -36,7 +45,7 @@ export async function POST(req: NextRequest) {
       maxAge: 60 * 60 * 24 * 7,
     });
     return res;
-  } catch (e) {
+  } catch {
     return NextResponse.json({ error: "Signup failed" }, { status: 500 });
   }
 }
