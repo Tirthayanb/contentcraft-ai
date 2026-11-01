@@ -111,5 +111,17 @@ Notes: `MONGODB_URI` in `.env.local` points to an Atlas cluster that cannot be r
   - `src/lib/openapi.ts`: Re-assembles and exports the complete specification.
 - Maintained compatibility with `GET /api/openapi` and `GET /api/docs` without any modifications to frontend files.
 
+### CSRF Protection (Origin validation)
+- Added `src/lib/auth/csrf.ts` with `validateCsrfOrigin()` helper:
+  - Rejects requests missing the `Origin` header with `403 Forbidden` (no silent allowance).
+  - Rejects requests with a mismatched `Origin` header with `403 Forbidden`.
+  - Compares against `NEXT_PUBLIC_APP_URL` / `APP_URL` if configured; otherwise derives expected origin from request `host` and `x-forwarded-proto` headers.
+- Applied Origin validation to all cookie-authenticated state-changing routes:
+  - `POST /api/auth/signup`
+  - `POST /api/auth/login`
+  - `POST /api/auth/logout`
+- Existing cookie settings (`httpOnly`, `secure`, `sameSite: lax`, `path`, `maxAge`) and authentication behavior are unchanged.
+- `GET /api/auth/me`, `GET /api/docs`, and `GET /api/openapi` are read-only and do not require CSRF protection.
+- Swagger UI loads via GET and fetches the OpenAPI spec via GET; same-origin "Try it out" POSTs pass Origin validation naturally. No special handling required.
 
 

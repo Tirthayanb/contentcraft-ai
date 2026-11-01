@@ -3,8 +3,12 @@ import { loginSchema } from "@/lib/auth/validation";
 import { verifyPassword } from "@/lib/auth/password";
 import { findUserByEmail, updateUserLastLogin, toSafeUser } from "@/models/User";
 import { signSession, getSessionCookieName } from "@/lib/auth/session";
+import { validateCsrfOrigin } from "@/lib/auth/csrf";
 
 export async function POST(req: NextRequest) {
+  const csrf = validateCsrfOrigin(req);
+  if (csrf) return csrf;
+
   try {
     const body = await req.json();
     const parsed = loginSchema.safeParse(body);
