@@ -1,7 +1,19 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
-const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-change-me";
+const KNOWN_INSECURE_DEFAULTS = new Set([
+  "dev-secret-change-me",
+  "replace-with-strong-random-secret",
+]);
+
+function loadJwtSecret(): string | undefined {
+  const secret = process.env.JWT_SECRET;
+  if (!secret || secret.length < 32 || KNOWN_INSECURE_DEFAULTS.has(secret)) {
+    return undefined;
+  }
+  return secret;
+}
+
 const SESSION_COOKIE_NAME = process.env.SESSION_COOKIE_NAME || "contentcraft_session";
 
 export interface SessionPayload {
@@ -11,12 +23,20 @@ export interface SessionPayload {
 }
 
 export function signSession(payload: SessionPayload): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+  const secret = loadJwtSecret();
+  if (!secret) {
+    throw new Error("JWT_SECRET is missing, too short, or insecure.");
+  }
+  return jwt.sign(payload, secret, { algorithm: "HS256", expiresIn: "7d" });
 }
 
 export function verifySession(token: string): SessionPayload | null {
+  const secret = loadJwtSecret();
+  if (!secret) {
+    return null;
+  }
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as SessionPayload;
+    const decoded = jwt.verify(token, secret, { algorithms: ["HS256"] }) as SessionPayload;
     return decoded;
   } catch {
     return null;
