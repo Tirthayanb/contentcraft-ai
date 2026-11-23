@@ -19,10 +19,13 @@ import {
   Layout,
   RotateCw,
   Menu,
+  Moon,
+  Sun,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { useTheme } from "@/components/providers/theme-provider";
 import { BrandLogo } from "@/components/brand/brand-logo";
 
 type ToolType = "write" | "repurpose" | "refine" | "simplify";
@@ -114,6 +117,7 @@ export default function Home() {
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const { resolvedTheme, setTheme } = useTheme();
   const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -324,12 +328,12 @@ export default function Home() {
       {/* Sticky Header */}
       <header className="sticky top-0 z-50 w-full bg-[#FAFAF8]/95 backdrop-blur-sm border-b border-[#E4E6DE]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-          <Link href="#workspace" className="flex items-center gap-2.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#373A36] rounded-md">
+          <Link href="#workspace" className="flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#373A36] rounded-md">
             <BrandLogo size="md" priority />
           </Link>
 
           {/* Desktop nav links — hidden below md */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#74786F]">
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#74786F] whitespace-nowrap">
             <Link href="#workspace" className="hover:text-black transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#373A36] rounded px-1 py-0.5">
               Product
             </Link>
@@ -342,6 +346,7 @@ export default function Home() {
           </nav>
 
           <div className="flex items-center gap-3 sm:gap-5">
+            {/* Desktop-only actions — hidden on mobile */}
             <Link
               href="#signin"
               className="hidden md:inline text-sm font-medium text-[#74786F] hover:text-black transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#373A36] rounded px-1 py-0.5"
@@ -350,13 +355,21 @@ export default function Home() {
             </Link>
             <Button
               asChild
-              className="bg-[#373A36] hover:bg-[#272C27] text-white text-xs sm:text-sm font-medium px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#373A36]"
+              className="hidden md:inline-flex bg-[#373A36] hover:bg-[#272C27] text-white text-xs sm:text-sm font-medium px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#373A36]"
             >
               <Link href="/signup">Get Started</Link>
             </Button>
-            <ThemeToggle size="sm" className="ml-3 sm:ml-4" />
+            <ThemeToggle size="sm" className="hidden md:ml-3 sm:ml-4" />
 
-            {/* Mobile hamburger — visible below md */}
+            {/* Mobile bar: compact single-icon theme toggle + hamburger menu */}
+            <button
+              type="button"
+              onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
+              className="md:hidden flex items-center justify-center w-8 h-8 rounded-lg text-[#74786F] hover:bg-[#F0EFEA] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#373A36]"
+              aria-label={resolvedTheme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+            >
+              {resolvedTheme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+            </button>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -370,7 +383,7 @@ export default function Home() {
 
         {/* Mobile dropdown nav */}
         {mobileMenuOpen && (
-          <nav className="md:hidden border-t border-[#E4E6DE]/60 bg-[#FAFAF8] px-4 py-4 space-y-1 animate-in fade-in slide-in-from-top-1 duration-200">
+          <nav className="md:hidden border-t border-[#E4E6DE]/60 bg-[#FAFAF8] px-4 py-4 space-y-2 animate-in fade-in slide-in-from-top-1 duration-200">
             <Link
               href="#workspace"
               onClick={closeMobileMenu}
@@ -398,6 +411,13 @@ export default function Home() {
               className="block px-3 py-2.5 rounded-lg text-sm font-medium text-[#74786F] hover:text-black hover:bg-[#F3F4EF] transition-colors"
             >
               Sign In
+            </Link>
+            <Link
+              href="/signup"
+              onClick={closeMobileMenu}
+              className="mt-2 block w-full px-4 py-3 text-center rounded-xl text-sm font-medium text-white bg-[#373A36] shadow-sm hover:bg-[#272C27] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#373A36]/30"
+            >
+              Get Started
             </Link>
           </nav>
         )}
