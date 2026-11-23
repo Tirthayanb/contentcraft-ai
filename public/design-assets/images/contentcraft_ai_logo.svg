@@ -1,55 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 140" width="680" height="140" role="img" aria-labelledby="logoTitle logoDesc">
-  <title id="logoTitle">ContentCraft AI Logo</title>
-  <desc id="logoDesc">A flat vector logo featuring a deep forest charcoal rounded-square icon containing a minimalist white folded document and editing stylus, paired with the wordmark ContentCraft AI.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="640" height="160" fill="none" role="img" aria-label="ContentCraft AI">
+  <!-- Solid warm off-white background -->
+  <rect width="640" height="160" rx="16" fill="#F9F9F6" />
 
-  <!-- Brand Definitions -->
-  <defs>
-    <style>
-      .brand-bg { fill: #2B3028; }
-      .brand-ink { fill: #2B3028; }
-      .icon-stroke {
-        fill: none;
-        stroke: #F9F9F6;
-        stroke-width: 5.5;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-      }
-      .icon-pen-fill {
-        fill: #F9F9F6;
-        stroke: #2B3028;
-        stroke-width: 3;
-        stroke-linejoin: round;
-      }
-      .wordmark {
-        font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-weight: 700;
-        font-size: 54px;
-        letter-spacing: -0.025em;
-        fill: #2B3028;
-      }
-    </style>
-  </defs>
+  <!-- Rounded-square icon mark in dark forest charcoal (#2B3028) -->
+  <g transform="translate(28, 22)">
+    <rect width="116" height="116" rx="28" fill="#2B3028" />
 
-  <!-- Logo Mark Container (108x108 centered vertically) -->
-  <g id="logo-mark" transform="translate(16, 16)">
-    <!-- Deep Forest Charcoal Rounded Square -->
-    <rect x="0" y="0" width="108" height="108" rx="26" ry="26" class="brand-bg" />
+    <!-- Minimalist folded document outline -->
+    <path d="M34 32C34 29.7909 35.7909 28 38 28H64L80 44V52M80 76V82C80 84.2091 78.2091 86 76 86H38C35.7909 86 34 84.2091 34 82V32Z" stroke="#F9F9F6" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M64 28V44H80" stroke="#F9F9F6" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" />
 
-    <!-- Minimalist Folded Document Outline -->
-    <path d="M 35 28 H 58 L 71 41 V 76 C 71 78.209 69.209 80 67 80 H 35 C 32.791 80 31 78.209 31 76 V 32 C 31 29.791 32.791 28 35 28 Z" class="icon-stroke" />
-    
-    <!-- Subtle Document Corner Fold -->
-    <path d="M 57 28 V 42 H 71" class="icon-stroke" stroke-width="4.5" />
+    <!-- Diagonal stylus / pen -->
+    <path d="M56 76L86 46L93 53L63 83L54 85L56 76Z" fill="#2B3028" stroke="#F9F9F6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
 
-    <!-- Precision Editing Pen / Stylus -->
-    <g transform="translate(65, 57) rotate(45)">
-      <!-- Pen Body with knock-out border for clean separation against document edge -->
-      <rect x="-5" y="-22" width="10" height="32" rx="2" class="icon-pen-fill" />
-      <!-- Pen Nib -->
-      <polygon points="-5,10 5,10 0,20" class="icon-pen-fill" />
-    </g>
+    <!-- 4-point AI sparkle in top-right corner -->
+    <path d="M88 18C89.5 23.5 92.5 26.5 98 28C92.5 29.5 89.5 32.5 88 38C86.5 32.5 83.5 29.5 78 28C83.5 26.5 86.5 23.5 88 18Z" fill="#F9F9F6" />
   </g>
 
-  <!-- Brand Wordmark -->
-  <text x="150" y="88" class="wordmark">ContentCraft AI</text>
+  <!-- Wordmark "ContentCraft AI" to the right of mark on same row, vertically centered -->
+  <text x="166" y="96" fill="#2B3028" font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="52" font-weight="700" letter-spacing="-1.2">
+    ContentCraft AI
+  </text>
 </svg>

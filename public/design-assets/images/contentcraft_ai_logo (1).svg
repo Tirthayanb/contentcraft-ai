@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 140" width="680" height="140" role="img" aria-labelledby="logoTitle logoDesc">
+  <title id="logoTitle">ContentCraft AI Logo</title>
+  <desc id="logoDesc">A flat vector logo featuring a deep forest charcoal rounded-square icon containing a minimalist white folded document and editing stylus, paired with the wordmark ContentCraft AI.</desc>
+
+  <!-- Brand Definitions -->
+  <defs>
+    <style>
+      .brand-bg { fill: #2B3028; }
+      .brand-ink { fill: #2B3028; }
+      .icon-stroke {
+        fill: none;
+        stroke: #F9F9F6;
+        stroke-width: 5.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .icon-pen-fill {
+        fill: #F9F9F6;
+        stroke: #2B3028;
+        stroke-width: 3;
+        stroke-linejoin: round;
+      }
+      .wordmark {
+        font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-weight: 700;
+        font-size: 54px;
+        letter-spacing: -0.025em;
+        fill: #2B3028;
+      }
+    </style>
+  </defs>
+
+  <!-- Logo Mark Container (108x108 centered vertically) -->
+  <g id="logo-mark" transform="translate(16, 16)">
+    <!-- Deep Forest Charcoal Rounded Square -->
+    <rect x="0" y="0" width="108" height="108" rx="26" ry="26" class="brand-bg" />
+
+    <!-- AI 4-Point Sparkle Icon in Top-Right Corner -->
+    <path d="M 82 14 Q 82 26 94 26 Q 82 26 82 38 Q 82 26 70 26 Q 82 26 82 14 Z" fill="none" stroke="#F9F9F6" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round" />
+
+    <!-- Minimalist Folded Document Outline -->
+    <path d="M 35 28 H 58 L 71 41 V 76 C 71 78.209 69.209 80 67 80 H 35 C 32.791 80 31 78.209 31 76 V 32 C 31 29.791 32.791 28 35 28 Z" class="icon-stroke" />
+    
+    <!-- Subtle Document Corner Fold -->
+    <path d="M 57 28 V 42 H 71" class="icon-stroke" stroke-width="4.5" />
+
+    <!-- Precision Editing Pen / Stylus -->
+    <g transform="translate(65, 57) rotate(45)">
+      <!-- Pen Body with knock-out border for clean separation against document edge -->
+      <rect x="-5" y="-22" width="10" height="32" rx="2" class="icon-pen-fill" />
+      <!-- Pen Nib -->
+      <polygon points="-5,10 5,10 0,20" class="icon-pen-fill" />
+    </g>
+  </g>
+
+  <!-- Brand Wordmark -->
+  <text x="150" y="88" class="wordmark">ContentCraft AI</text>
+</svg>

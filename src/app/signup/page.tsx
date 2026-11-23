@@ -172,7 +172,7 @@ export default function SignupPage() {
             aria-label="Go to home page"
             className="flex items-center gap-3 cursor-pointer group rounded-md transition-all duration-200 hover:opacity-80 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#383E36] focus-visible:ring-offset-2"
           >
-            <BrandLogo size="md" priority className="h-7 sm:h-8" />
+            <BrandLogo size="md" priority />
           </Link>
           <ThemeToggle size="sm" />
         </div>
