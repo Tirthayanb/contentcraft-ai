@@ -5,70 +5,64 @@ import { cn } from '@/lib/utils';
 import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '@/components/providers/theme-provider';
 
-interface ThemeToggleProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ThemeToggleProps {
   className?: string;
   size?: 'default' | 'sm';
 }
 
-const ThemeToggle = React.forwardRef<HTMLButtonElement, ThemeToggleProps>(
-  ({ className, size = 'default', ...props }, ref) => {
-    const { resolvedTheme, toggleTheme } = useTheme();
-
+const ThemeToggle = React.forwardRef<HTMLDivElement, ThemeToggleProps>(
+  ({ className, size = 'sm', ...props }, ref) => {
+    const { resolvedTheme, setTheme } = useTheme();
     const isDark = resolvedTheme === 'dark';
 
-    const trackSize = size === 'sm' ? 'w-10 h-5' : 'w-12 h-6';
-    const thumbSize = size === 'sm' ? 'w-5 h-5' : 'w-6 h-6';
-    const iconSize = size === 'sm' ? 'w-3 h-3' : 'w-4 h-4';
+    const btnSize = size === 'sm' ? 'w-7 h-7' : 'w-8 h-8';
+    const iconSize = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
 
     return (
-      <button
+      <div
         ref={ref}
-        role="switch"
-        aria-checked={isDark}
-        aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-        onClick={toggleTheme}
+        role="group"
+        aria-label="Theme mode"
         className={cn(
-          'relative flex items-center justify-center overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-          trackSize,
-          isDark ? 'bg-[#27272A]' : 'bg-[#E5E5E0]',
+          'inline-flex items-center gap-1 rounded-lg border border-transparent bg-[#FAFAF8] p-1 shadow-sm',
           className
         )}
         {...props}
       >
-        {/* Sun icon (visible in light mode) */}
-        <div
+        {/* Light Mode — Sun */}
+        <button
+          type="button"
+          aria-pressed={!isDark}
+          aria-label="Switch to light mode"
+          onClick={() => setTheme('light')}
           className={cn(
-            'absolute left-1 top-1 flex items-center justify-center transition-transform duration-200 ease-in-out',
-            isDark
-              ? 'translate-x-[-120%] opacity-0'
-              : 'translate-x-0 opacity-100'
+            btnSize,
+            'rounded-md flex items-center justify-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#373A36]/30 disabled:pointer-events-none disabled:opacity-50',
+            !isDark
+              ? 'bg-[#27272A] text-[#FAFAF8] shadow-sm'
+              : 'text-[#9CA3AF] hover:bg-[#F4F4F2] hover:text-[#373A36]'
           )}
         >
-          <Sun className={cn(iconSize, 'text-[#373A36]')} />
-        </div>
+          <Sun className={cn(iconSize, 'fill-current stroke-none')} />
+        </button>
 
-        {/* Moon icon (visible in dark mode) */}
-        <div
+        {/* Dark Mode — Moon */}
+        <button
+          type="button"
+          aria-pressed={isDark}
+          aria-label="Switch to dark mode"
+          onClick={() => setTheme('dark')}
           className={cn(
-            'absolute right-1 top-1 flex items-center justify-center transition-transform duration-200 ease-in-out',
+            btnSize,
+            'rounded-md flex items-center justify-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#373A36]/30 disabled:pointer-events-none disabled:opacity-50',
             isDark
-              ? 'translate-x-0 opacity-100'
-              : 'translate-x-[120%] opacity-0'
+              ? 'bg-[#27272A] text-[#FAFAF8] shadow-sm'
+              : 'text-[#9CA3AF] hover:bg-[#F4F4F2] hover:text-[#373A36]'
           )}
         >
-          <Moon className={cn(iconSize, 'text-[#FAFAF8]')} />
-        </div>
-
-        {/* Sliding thumb */}
-        <div
-          className={cn(
-            thumbSize,
-            'rounded-full bg-[#FAFAF8] shadow-md transition-transform duration-200 ease-in-out',
-            isDark ? 'translate-x-full -translate-x-1/2' : 'translate-x-0 -translate-x-1/2'
-          )}
-        />
-      </button>
+          <Moon className={cn(iconSize, 'fill-current stroke-none')} />
+        </button>
+      </div>
     );
   }
 );
@@ -76,3 +70,4 @@ const ThemeToggle = React.forwardRef<HTMLButtonElement, ThemeToggleProps>(
 ThemeToggle.displayName = 'ThemeToggle';
 
 export { ThemeToggle, type ThemeToggleProps };
+
