@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="108" height="108" role="img" aria-labelledby="symbolTitle">
+  <title id="symbolTitle">ContentCraft AI Symbol</title>
+  <defs>
+    <style>
+      .brand-bg { fill: #2B3028; }
+      .icon-stroke {
+        fill: none;
+        stroke: #F9F9F6;
+        stroke-width: 5.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .icon-pen-fill {
+        fill: #F9F9F6;
+        stroke: #2B3028;
+        stroke-width: 3;
+        stroke-linejoin: round;
+      }
+    </style>
+  </defs>
+  <rect x="0" y="0" width="108" height="108" rx="26" ry="26" class="brand-bg" />
+  <path d="M 35 28 H 58 L 71 41 V 76 C 71 78.209 69.209 80 67 80 H 35 C 32.791 80 31 78.209 31 76 V 32 C 31 29.791 32.791 28 35 28 Z" class="icon-stroke" />
+  <path d="M 57 28 V 42 H 71" class="icon-stroke" stroke-width="4.5" />
+  <g transform="translate(65, 57) rotate(45)">
+    <rect x="-5" y="-22" width="10" height="32" rx="2" class="icon-pen-fill" />
+    <polygon points="-5,10 5,10 0,20" class="icon-pen-fill" />
+  </g>
+</svg>

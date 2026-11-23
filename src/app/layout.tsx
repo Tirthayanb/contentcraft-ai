@@ -16,6 +16,16 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "ContentCraft AI - Turn ideas into impactful content",
   description: "Summarize, rewrite, simplify, and create content with a toolkit designed to help you write with clarity.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "48x48" },
+      { url: "/design-assets/images/contentcraft_ai_symbol.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", type: "image/png", sizes: "180x180" },
+    ],
+  },
 };
 
 export default function RootLayout({

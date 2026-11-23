@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { BrandLogo } from '@/components/brand/brand-logo';
 import { AlertCircle, ArrowRight, Sparkles } from 'lucide-react';
 
 const API_URL = '/api/auth/signup';
@@ -33,27 +34,6 @@ const emptyForm: FormData = {
 
 const emptyErrors: FieldErrors = {};
 
-function LogoIcon() {
-  return (
-    <div className="flex items-center justify-center w-[30px] h-[30px] rounded-[6px] bg-[#383E36] shrink-0">
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 18 18"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M13.5 16.5H12.625C12.161 16.5 11.716 16.3156 11.387 15.9875C11.059 15.6593 10.875 15.2143 10.875 14.7502M10.875 14.7502C10.875 15.2143 10.69 15.6593 10.362 15.9875C10.034 16.3156 9.589 16.5 9.125 16.5H8.25M10.875 14.7502V4.2512M10.875 4.2512C10.875 3.7871 10.69 3.3421 10.362 3.0139C10.034 2.6858 9.589 2.5014 9.125 2.5014H8.25M10.875 4.2512C10.875 3.7871 11.059 3.3421 11.387 3.0139C11.716 2.6858 12.161 2.5014 12.625 2.5014H13.5M14.375 6.0011H20.501C20.965 6.0011 21.41 6.1854 21.738 6.5136C22.066 6.8417 22.251 7.2868 22.251 7.7509V11.2505C22.251 11.7146 22.066 12.1597 21.738 12.4878C21.41 12.816 20.965 13.0004 20.501 13.0004H14.375M7.375 13.0004H6.499C6.035 13.0004 5.59 12.816 5.262 12.4878C4.934 12.1597 4.749 11.7146 4.749 11.2505V7.7509C4.749 7.2868 4.934 6.8417 5.262 6.5136C5.59 6.1854 6.035 6.0011 6.499 6.0011H7.375"
-          stroke="#F4F5EF"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          transform="translate(-4, -2)"
-        />
-      </svg>
-    </div>
-  );
-}
 
 function GoogleIcon() {
   return (
@@ -192,10 +172,7 @@ export default function SignupPage() {
             aria-label="Go to home page"
             className="flex items-center gap-3 cursor-pointer group rounded-md transition-all duration-200 hover:opacity-80 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#383E36] focus-visible:ring-offset-2"
           >
-            <LogoIcon />
-            <span className="text-[17px] font-semibold tracking-tight text-[#252A23]">
-              ContentCraft AI
-            </span>
+            <BrandLogo size="md" priority className="h-7 sm:h-8" />
           </Link>
           <ThemeToggle size="sm" />
         </div>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#373A36"/>
+  <!-- Document body -->
+  <rect x="120" y="80" width="208" height="288" rx="20" stroke="white" stroke-width="24" fill="none"/>
+  <!-- Folded corner -->
+  <path d="M248 80V160H328" stroke="white" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Pen/edit diagonal -->
+  <line x1="288" y1="264" x2="380" y2="172" stroke="white" stroke-width="24" stroke-linecap="round"/>
+  <path d="M380 172L404 196L312 288L288 264Z" stroke="white" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
