@@ -326,7 +326,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#FAFAF8] text-[#252A23] font-sans selection:bg-[#EAE8E3] scroll-smooth">
       {/* Sticky Header */}
-      <header className="sticky top-0 z-50 w-full bg-[#FAFAF8]/95 backdrop-blur-sm border-b border-[#E4E6DE]">
+      <header className="sticky top-0 z-50 w-full bg-[#FAFAF8] border-b border-[#E4E6DE] shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
           <Link href="#workspace" className="flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#373A36] rounded-md">
             <BrandLogo size="md" priority />
