@@ -6,6 +6,7 @@ import { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { BrandLogo } from '@/components/brand/brand-logo';
+import { Container } from '@/components/layout/container';
 import { AlertCircle, ArrowRight, Sparkles } from 'lucide-react';
 
 const API_URL = '/api/auth/signup';
@@ -164,9 +165,9 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen w-full bg-[#FAFAF8] text-[#252A23] flex flex-col justify-between selection:bg-[#EAE8E3]">
-      {/* Header: matched to reference (border #E4E6DE, logo at x=112 y=29, h=88) */}
+      {/* Header: matched to shared layout rhythm and alignment */}
       <header className="w-full border-b border-[#E4E6DE] bg-[#FAFAF8]">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12 xl:px-28 h-[88px] flex justify-between items-center">
+        <Container className="h-16 sm:h-20 flex justify-between items-center">
           <Link
             href="/"
             aria-label="Go to home page"
@@ -175,12 +176,12 @@ export default function SignupPage() {
             <BrandLogo size="md" priority />
           </Link>
           <ThemeToggle size="sm" />
-        </div>
+        </Container>
       </header>
 
       {/* Main Content Area */}
-      <main className="w-full max-w-[1440px] mx-auto px-6 md:px-12 xl:px-28 py-8 md:py-12 xl:py-16 flex-1 flex items-center">
-        <div className="w-full flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-16">
+      <main className="w-full flex-1 flex items-center py-8 sm:py-12 lg:py-16">
+        <Container className="flex flex-col lg:flex-row justify-between items-center lg:items-start gap-12 lg:gap-16">
           {/* Left Column (Hero Section) */}
           <section className="w-full lg:w-[537px] shrink-0 pt-0 lg:pt-8 order-2 lg:order-1">
             <div className="mb-4">
@@ -406,12 +407,12 @@ export default function SignupPage() {
               </form>
             </div>
           </section>
-        </div>
+        </Container>
       </main>
 
       {/* Footer */}
       <footer className="w-full border-t border-[#E4E6DE] bg-[#FAFAF8] mt-auto">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12 xl:px-28 h-[76px] flex flex-col sm:flex-row justify-between items-center gap-3 text-[13px] text-[#8C9187]">
+        <Container className="h-16 sm:h-20 flex flex-col sm:flex-row justify-between items-center gap-3 text-[13px] text-[#8C9187]">
           <span>Your ideas. Your voice. A little more clarity.</span>
           <div className="flex items-center gap-4 sm:gap-6">
             <a
@@ -428,7 +429,7 @@ export default function SignupPage() {
               Terms of Service
             </a>
           </div>
-        </div>
+        </Container>
       </footer>
     </div>
   );

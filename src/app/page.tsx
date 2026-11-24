@@ -27,6 +27,7 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useTheme } from "@/components/providers/theme-provider";
 import { BrandLogo } from "@/components/brand/brand-logo";
+import { Container } from "@/components/layout/container";
 
 type ToolType = "write" | "repurpose" | "refine" | "simplify";
 
@@ -327,7 +328,7 @@ export default function Home() {
     <div className="min-h-screen bg-[#FAFAF8] text-[#252A23] font-sans selection:bg-[#EAE8E3] scroll-smooth">
       {/* Sticky Header */}
       <header className="sticky top-0 z-50 w-full bg-[#FAFAF8] border-b border-[#E4E6DE] shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+        <Container className="h-16 sm:h-20 flex items-center justify-between">
           <Link href="#workspace" className="flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#373A36] rounded-md">
             <BrandLogo size="md" priority />
           </Link>
@@ -379,7 +380,7 @@ export default function Home() {
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
-        </div>
+        </Container>
 
         {/* Mobile dropdown nav */}
         {mobileMenuOpen && (
@@ -1144,8 +1145,8 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-[#E4E6DE] bg-[#FAFAF8] py-8 sm:py-12 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 sm:gap-6">
+      <footer className="border-t border-[#E4E6DE] bg-[#FAFAF8] py-8 sm:py-12">
+        <Container className="flex flex-col md:flex-row items-center justify-between gap-5 sm:gap-6">
           <Link href="#workspace" className="flex items-center gap-2.5 sm:gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#373A36] rounded">
             <BrandLogo size="sm" />
           </Link>
@@ -1167,12 +1168,12 @@ export default function Home() {
               Terms
             </Link>
           </div>
-        </div>
+        </Container>
 
-        <div className="max-w-6xl mx-auto mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-[#F3F4EF] flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 text-xs text-[#9E9E98]">
+        <Container className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-[#F3F4EF] flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 text-xs text-[#9E9E98]">
           <p>© 2026 ContentCraft AI</p>
           <p>A little more clarity. A little more you.</p>
-        </div>
+        </Container>
       </footer>
     </div>
   );
