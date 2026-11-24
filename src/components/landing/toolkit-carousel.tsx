@@ -116,6 +116,8 @@ export function ToolkitCarousel({ onSelectTool }: ToolkitCarouselProps) {
   const cardRefs = React.useRef<(HTMLDivElement | null)[]>([]);
   const videoRefs = React.useRef<(HTMLVideoElement | null)[]>([]);
   const [translateX, setTranslateX] = React.useState(0);
+  const autoplayTimerRef = React.useRef<number | null>(null);
+  const slideIndexRef = React.useRef(slideIndex);
 
   const touchStartXRef = React.useRef<number | null>(null);
   const touchStartYRef = React.useRef<number | null>(null);
@@ -126,6 +128,43 @@ export function ToolkitCarousel({ onSelectTool }: ToolkitCarouselProps) {
     const lastClone = { ...TOOLKIT_ITEMS[originalLength - 1], cloneKey: "clone-start" };
     return [lastClone, ...TOOLKIT_ITEMS, firstClone];
   }, [originalLength]);
+
+  // Keep slideIndexRef in sync
+  React.useEffect(() => {
+    slideIndexRef.current = slideIndex;
+  }, [slideIndex]);
+
+  // Start / reset autoplay timer (5000ms). Pauses on hover/focus/touch.
+  const startAutoplay = React.useCallback(() => {
+    if (isPaused) return;
+    if (autoplayTimerRef.current !== null) {
+      clearInterval(autoplayTimerRef.current);
+      autoplayTimerRef.current = null;
+    }
+    autoplayTimerRef.current = window.setInterval(() => {
+      const next = (slideIndexRef.current + 1) % extendedItems.length;
+      setSlideIndex(next);
+    }, 5000);
+  }, [isPaused, extendedItems.length]);
+
+  const stopAutoplay = React.useCallback(() => {
+    if (autoplayTimerRef.current !== null) {
+      clearInterval(autoplayTimerRef.current);
+      autoplayTimerRef.current = null;
+    }
+  }, []);
+
+  // Initialize autoplay on mount
+  React.useEffect(() => {
+    startAutoplay();
+    return () => stopAutoplay();
+  }, [startAutoplay, stopAutoplay, isPaused]);
+
+  // Reset autoplay timer after manual navigation
+  const resetAutoplay = React.useCallback(() => {
+    stopAutoplay();
+    startAutoplay();
+  }, [startAutoplay, stopAutoplay]);
 
   // Recalculate track position to center current card in the container viewport
   const updateTrackPosition = React.useCallback(() => {
@@ -176,28 +215,20 @@ export function ToolkitCarousel({ onSelectTool }: ToolkitCarouselProps) {
   const nextSlide = React.useCallback(() => {
     if (!isTransitioning) return;
     setSlideIndex((prev) => prev + 1);
-  }, [isTransitioning]);
+    resetAutoplay();
+  }, [isTransitioning, resetAutoplay]);
 
   const prevSlide = React.useCallback(() => {
     if (!isTransitioning) return;
     setSlideIndex((prev) => prev - 1);
-  }, [isTransitioning]);
+    resetAutoplay();
+  }, [isTransitioning, resetAutoplay]);
 
   const goToSlide = (realIndex: number) => {
     setIsTransitioning(true);
     setSlideIndex(realIndex + 1);
+    resetAutoplay();
   };
-
-  // Autoplay timer (4.5s), pauses on hover/touch/focus
-  React.useEffect(() => {
-    if (isPaused) return;
-
-    const timer = setInterval(() => {
-      nextSlide();
-    }, 5000);
-
-    return () => clearInterval(timer);
-  }, [isPaused, nextSlide]);
 
   // Manage video playback: only the active card's video plays
   React.useEffect(() => {
@@ -216,7 +247,47 @@ export function ToolkitCarousel({ onSelectTool }: ToolkitCarouselProps) {
     });
   }, [slideIndex]);
 
-  // Touch swipe support
+  // Handle browser tab visibility: pause videos when hidden, sync when visible
+  React.useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Tab hidden: pause active video safely
+        const activeVideo = videoRefs.current[slideIndex];
+        if (activeVideo) {
+          try {
+            activeVideo.pause();
+          } catch {
+            // Ignore errors on inactive videos
+          }
+        }
+      } else {
+        // Tab visible: sync active slide video and track position
+        videoRefs.current.forEach((video, idx) => {
+          if (!video) return;
+          if (idx === slideIndex) {
+            const promise = video.play();
+            if (promise !== undefined) {
+              promise.catch(() => {
+                // Browser autoplay restrictions
+              });
+            }
+          } else {
+            try {
+              video.pause();
+            } catch {
+              // Ignore
+            }
+          }
+        });
+        updateTrackPosition();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, [slideIndex, updateTrackPosition]);
+
+  // Touch swipe support (pause autoplay during interaction)
   const handleTouchStart = (e: React.TouchEvent) => {
     setIsPaused(true);
     touchStartXRef.current = e.touches[0].clientX;

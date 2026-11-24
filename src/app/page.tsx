@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   PenTool,
   Repeat,
@@ -470,8 +471,54 @@ export default function Home() {
         </div>
 
         {/* Interactive Workspace / Tool Preview */}
-        <div id="workspace" className="mt-10 sm:mt-14 max-w-4xl mx-auto text-left scroll-mt-24 sm:scroll-mt-28">
-          <div className="bg-white rounded-2xl border border-[#E4E6DE] shadow-sm overflow-hidden p-4 sm:p-5 md:p-7 space-y-5 sm:space-y-7">
+        <div id="workspace" className="mt-10 sm:mt-14 max-w-4xl mx-auto text-left scroll-mt-24 sm:scroll-mt-28 relative">
+          {/* Ambient Decorative Flanking Artwork (Left: sage-olive refractions) */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -left-24 sm:-left-36 md:-left-44 lg:-left-56 top-1/2 -translate-y-1/2 z-0 hidden sm:block w-72 sm:w-96 lg:w-[460px] h-[340px] sm:h-[420px] lg:h-[500px] opacity-80 dark:opacity-40 mix-blend-multiply dark:mix-blend-screen select-none"
+            style={{
+              maskImage:
+                "radial-gradient(ellipse 70% 65% at 45% 50%, black 25%, transparent 75%)",
+              WebkitMaskImage:
+                "radial-gradient(ellipse 70% 65% at 45% 50%, black 25%, transparent 75%)",
+            }}
+          >
+            <div className="w-full h-full animate-caustic-drift-left relative">
+              <Image
+                src="/design-assets/artwork/caustic-glass-artwork.jpeg"
+                alt=""
+                fill
+                priority
+                sizes="(max-width: 1024px) 384px, 460px"
+                className="object-cover object-left"
+              />
+            </div>
+          </div>
+
+          {/* Ambient Decorative Flanking Artwork (Right: warm-amber refractions) */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-24 sm:-right-36 md:-right-44 lg:-right-56 top-1/2 -translate-y-1/2 z-0 hidden sm:block w-72 sm:w-96 lg:w-[460px] h-[340px] sm:h-[420px] lg:h-[500px] opacity-80 dark:opacity-40 mix-blend-multiply dark:mix-blend-screen select-none"
+            style={{
+              maskImage:
+                "radial-gradient(ellipse 70% 65% at 55% 50%, black 25%, transparent 75%)",
+              WebkitMaskImage:
+                "radial-gradient(ellipse 70% 65% at 55% 50%, black 25%, transparent 75%)",
+            }}
+          >
+            <div className="w-full h-full animate-caustic-drift-right relative">
+              <Image
+                src="/design-assets/artwork/caustic-glass-artwork.jpeg"
+                alt=""
+                fill
+                priority
+                sizes="(max-width: 1024px) 384px, 460px"
+                className="object-cover object-right"
+              />
+            </div>
+          </div>
+
+          <div className="relative z-10 bg-white rounded-2xl border border-[#E4E6DE] shadow-sm overflow-hidden p-4 sm:p-5 md:p-7 space-y-5 sm:space-y-7">
             
             {/* Upper Section: One idea. Four ways forward. (TOOL PREVIEW) */}
             <div
@@ -885,12 +932,13 @@ export default function Home() {
             }}
           >
             <div className="w-full h-full animate-caustic-drift-left relative">
-              <img
+              <Image
                 src="/design-assets/artwork/caustic-glass-artwork.jpeg"
                 alt=""
-                className="w-full h-full object-cover object-left"
-                loading="eager"
-                decoding="async"
+                fill
+                priority
+                sizes="(max-width: 1024px) 384px, 480px"
+                className="object-cover object-left"
               />
             </div>
           </div>
@@ -907,12 +955,13 @@ export default function Home() {
             }}
           >
             <div className="w-full h-full animate-caustic-drift-right relative">
-              <img
+              <Image
                 src="/design-assets/artwork/caustic-glass-artwork.jpeg"
                 alt=""
-                className="w-full h-full object-cover object-right"
-                loading="eager"
-                decoding="async"
+                fill
+                priority
+                sizes="(max-width: 1024px) 384px, 480px"
+                className="object-cover object-right"
               />
             </div>
           </div>
