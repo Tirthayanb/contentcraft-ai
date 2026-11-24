@@ -250,6 +250,24 @@ export default function Home() {
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, []);
 
+  // Force scroll to top on Landing Page reload while disabling browser automatic scroll restoration
+  useEffect(() => {
+    // Disable automatic browser scroll restoration on landing page
+    if ("scrollRestoration" in window.history) {
+      const originalRestoration = window.history.scrollRestoration;
+      window.history.scrollRestoration = "manual";
+
+      // Reset scroll position immediately
+      window.scrollTo(0, 0);
+
+      return () => {
+        window.history.scrollRestoration = originalRestoration;
+      };
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, []);
+
   // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
