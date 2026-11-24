@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { BrandLogo } from '@/components/brand/brand-logo';
 import { Container } from '@/components/layout/container';
+import { BackButton } from '@/components/ui/back-button';
 import { AlertCircle, ArrowRight, Sparkles } from 'lucide-react';
 
 const API_URL = '/api/auth/signup';
@@ -168,13 +169,16 @@ export default function SignupPage() {
       {/* Header: matched to shared layout rhythm and alignment */}
       <header className="w-full border-b border-[#E4E6DE] bg-[#FAFAF8]">
         <Container className="h-16 sm:h-20 flex justify-between items-center">
-          <Link
-            href="/"
-            aria-label="Go to home page"
-            className="flex items-center gap-3 cursor-pointer group rounded-md transition-all duration-200 hover:opacity-80 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#383E36] focus-visible:ring-offset-2"
-          >
-            <BrandLogo size="md" priority />
-          </Link>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <BackButton className="hidden md:flex" />
+            <Link
+              href="/"
+              aria-label="Go to home page"
+              className="flex items-center gap-3 cursor-pointer group rounded-md transition-all duration-200 hover:opacity-80 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#383E36] focus-visible:ring-offset-2"
+            >
+              <BrandLogo size="md" priority />
+            </Link>
+          </div>
           <ThemeToggle size="sm" />
         </Container>
       </header>

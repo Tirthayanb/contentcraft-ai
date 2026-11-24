@@ -19,13 +19,10 @@ import {
   Layout,
   RotateCw,
   Menu,
-  Moon,
-  Sun,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { useTheme } from "@/components/providers/theme-provider";
 import { BrandLogo } from "@/components/brand/brand-logo";
 import { Container } from "@/components/layout/container";
 
@@ -118,7 +115,6 @@ export default function Home() {
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
-  const { resolvedTheme, setTheme } = useTheme();
   const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -378,17 +374,9 @@ export default function Home() {
             >
               <Link href="/signup">Get Started</Link>
             </Button>
-            <ThemeToggle size="sm" className="hidden md:ml-3 sm:ml-4" />
+            <ThemeToggle size="sm" className="md:ml-3 sm:ml-4" />
 
-            {/* Mobile bar: compact single-icon theme toggle + hamburger menu */}
-            <button
-              type="button"
-              onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
-              className="md:hidden flex items-center justify-center w-8 h-8 rounded-lg text-[#74786F] hover:bg-[#F0EFEA] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#373A36]"
-              aria-label={resolvedTheme === "light" ? "Switch to dark mode" : "Switch to light mode"}
-            >
-              {resolvedTheme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-            </button>
+            {/* Mobile bar: hamburger menu */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
