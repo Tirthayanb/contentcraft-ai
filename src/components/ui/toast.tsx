@@ -11,8 +11,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type ToastVariant = "info" | "success" | "warning" | "error" | "default";
-export type ToastPosition = "top-right" | "top-center" | "bottom-right" | "bottom-center";
+export type ToastVariant = "info" | "success" | "warning" | "error";
 
 export interface ToastItem {
   id: string;
@@ -29,19 +28,15 @@ interface ToastContextType {
   toasts: ToastItem[];
   toast: (options: Omit<ToastItem, "id">) => string;
   dismiss: (id: string) => void;
-  position: ToastPosition;
-  setPosition: (pos: ToastPosition) => void;
 }
 
 const ToastContext = React.createContext<ToastContextType | undefined>(undefined);
 
 const toastVariants = cva(
-  "pointer-events-auto flex items-start gap-3 w-full max-w-sm sm:max-w-md rounded-xl border p-4 shadow-lg backdrop-blur-md transition-all duration-300 animate-in fade-in slide-in-from-top-2",
+  "pointer-events-auto flex items-start gap-3 w-full max-w-sm sm:max-w-md rounded-xl border p-4 shadow-lg backdrop-blur-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-2",
   {
     variants: {
       variant: {
-        default:
-          "bg-white/95 border-[#E4E6DE] text-[#252A23] dark:bg-[#1E241E]/95 dark:border-[#383E36] dark:text-[#FAFAF8]",
         info: "bg-white/95 border-[#D0DFFA] text-[#1E3A8A] dark:bg-[#1E241E]/95 dark:border-[#38BDF8]/40 dark:text-[#E0F2FE]",
         success:
           "bg-white/95 border-[#BBF7D0] text-[#14532D] dark:bg-[#1E241E]/95 dark:border-[#34D399]/40 dark:text-[#ECFDF5]",
@@ -52,13 +47,12 @@ const toastVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: "info",
     },
   }
 );
 
 const iconMap = {
-  default: Info,
   info: Info,
   success: CheckCircle2,
   warning: AlertTriangle,
@@ -66,7 +60,6 @@ const iconMap = {
 };
 
 const iconColorMap = {
-  default: "text-[#373A36] dark:text-[#E4E6DE]",
   info: "text-[#2563EB] dark:text-[#38BDF8]",
   success: "text-[#16A34A] dark:text-[#34D399]",
   warning: "text-[#D97706] dark:text-[#FBBF24]",
@@ -75,7 +68,6 @@ const iconColorMap = {
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = React.useState<ToastItem[]>([]);
-  const [position, setPosition] = React.useState<ToastPosition>("bottom-right");
 
   const dismiss = React.useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
@@ -105,7 +97,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <ToastContext.Provider value={{ toasts, toast, dismiss, position, setPosition }}>
+    <ToastContext.Provider value={{ toasts, toast, dismiss }}>
       {children}
       <Toaster />
     </ToastContext.Provider>
@@ -120,28 +112,18 @@ export function useToast() {
   return context;
 }
 
-const positionClassMap: Record<ToastPosition, string> = {
-  "top-right": "top-4 right-4 items-end",
-  "top-center": "top-4 left-1/2 -translate-x-1/2 items-center",
-  "bottom-right": "bottom-4 right-4 items-end",
-  "bottom-center": "bottom-4 left-1/2 -translate-x-1/2 items-center",
-};
-
 export function Toaster() {
-  const { toasts, dismiss, position } = useToast();
+  const { toasts, dismiss } = useToast();
 
   if (toasts.length === 0) return null;
 
   return (
     <div
       aria-live="polite"
-      className={cn(
-        "fixed z-50 flex flex-col gap-2.5 p-4 pointer-events-none w-full max-w-sm sm:max-w-md",
-        positionClassMap[position]
-      )}
+      className="fixed z-50 flex flex-col gap-2.5 p-4 pointer-events-none w-full max-w-sm sm:max-w-md bottom-4 right-4 items-end"
     >
       {toasts.map((t) => {
-        const variant = t.variant || "default";
+        const variant = t.variant || "info";
         const IconComponent = iconMap[variant];
         const iconColor = iconColorMap[variant];
 
