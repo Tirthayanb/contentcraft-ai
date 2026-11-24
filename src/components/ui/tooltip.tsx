@@ -22,6 +22,7 @@ export function Tooltip({
 }: TooltipProps) {
   const [open, setOpen] = React.useState(false);
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+  const tooltipId = React.useId();
 
   const showTooltip = React.useCallback(() => {
     timeoutRef.current = setTimeout(() => {
@@ -75,7 +76,7 @@ export function Tooltip({
       childProps.onBlur?.(e);
       hideTooltip();
     },
-    "aria-describedby": open ? "tooltip-content" : undefined,
+    "aria-describedby": open ? tooltipId : undefined,
   } as React.HTMLAttributes<HTMLElement>);
 
   return (
@@ -84,7 +85,7 @@ export function Tooltip({
 
       {open && (
         <div
-          id="tooltip-content"
+          id={tooltipId}
           role="tooltip"
           className={cn(
             "pointer-events-none absolute z-50 whitespace-nowrap rounded-lg px-2.5 py-1 text-xs font-medium transition-all duration-150 animate-in fade-in-0 zoom-in-95 shadow-md",

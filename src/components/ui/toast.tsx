@@ -120,7 +120,7 @@ export function Toaster() {
   return (
     <div
       aria-live="polite"
-      className="fixed z-50 flex flex-col gap-2.5 p-4 pointer-events-none w-full max-w-sm sm:max-w-md bottom-4 right-4 items-end"
+      className="fixed z-50 flex flex-col gap-2.5 p-4 pointer-events-none w-full max-w-xs sm:max-w-sm md:max-w-md bottom-4 right-4 left-4 sm:left-auto items-end"
     >
       {toasts.map((t) => {
         const variant = t.variant || "info";
