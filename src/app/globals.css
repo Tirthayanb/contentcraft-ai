@@ -122,3 +122,51 @@ html {
 html.dark {
   scrollbar-color: #41473D #18181B;
 }
+
+/* Subtle, organic caustic glass ambient animations for decorative flanking artwork */
+@keyframes caustic-drift-left {
+  0% {
+    transform: translate3d(-10px, 6px, 0) rotate(-1.5deg) scale(1);
+    opacity: 0.82;
+  }
+  50% {
+    transform: translate3d(6px, -8px, 0) rotate(1deg) scale(1.025);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate3d(-6px, -4px, 0) rotate(-0.5deg) scale(1.01);
+    opacity: 0.88;
+  }
+}
+
+@keyframes caustic-drift-right {
+  0% {
+    transform: translate3d(8px, -6px, 0) rotate(1.5deg) scale(1.02);
+    opacity: 0.88;
+  }
+  50% {
+    transform: translate3d(-8px, 8px, 0) rotate(-1.2deg) scale(0.99);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate3d(4px, 4px, 0) rotate(0.8deg) scale(1.015);
+    opacity: 0.92;
+  }
+}
+
+.animate-caustic-drift-left {
+  animation: caustic-drift-left 18s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+.animate-caustic-drift-right {
+  animation: caustic-drift-right 22s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-caustic-drift-left,
+  .animate-caustic-drift-right {
+    animation: none !important;
+  }
+}

@@ -7,8 +7,6 @@ import {
   Repeat,
   Sparkles,
   Sliders,
-  FileText,
-  MessageSquare,
   Copy,
   Check,
   ArrowRight,
@@ -25,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { BrandLogo } from "@/components/brand/brand-logo";
 import { Container } from "@/components/layout/container";
+import { ToolkitCarousel } from "@/components/landing/toolkit-carousel";
 
 type ToolType = "write" | "repurpose" | "refine" | "simplify";
 
@@ -342,7 +341,7 @@ export default function Home() {
     <div className="min-h-screen bg-[#FAFAF8] text-[#252A23] font-sans selection:bg-[#EAE8E3] scroll-smooth">
       {/* Sticky Header */}
       <header className="sticky top-0 z-50 w-full bg-[#FAFAF8] border-b border-[#E4E6DE] shadow-sm">
-        <Container className="h-16 sm:h-20 flex items-center justify-between">
+        <Container className="h-12 sm:h-16 flex items-center justify-between">
           <Link href="#workspace" className="flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#373A36] rounded-md">
             <BrandLogo size="md" priority />
           </Link>
@@ -858,9 +857,9 @@ export default function Home() {
       {/* The Toolkit Section */}
       <section
         id="features"
-        className="py-14 sm:py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-[#F3F4EF] scroll-mt-20"
+        className="py-14 sm:py-20 border-t border-[#F3F4EF] scroll-mt-20 overflow-hidden w-full"
       >
-        <div className="mb-8 sm:mb-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 mb-8 sm:mb-12">
           <span className="text-xs font-bold tracking-wider text-[#8A8983] uppercase block mb-2 sm:mb-3">
             The Toolkit
           </span>
@@ -872,137 +871,55 @@ export default function Home() {
           </p>
         </div>
 
-        {/* 4 Feature Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {/* Card 1: Summarize */}
+        {/* Apple TV+ Style Peeking Carousel with Decorative Flanking Artwork */}
+        <div className="relative w-full overflow-hidden">
+          {/* Left Decorative Ambient Artwork */}
           <div
-            onClick={() => {
-              handleSelectTool("write");
-              const el = document.getElementById("workspace");
-              el?.scrollIntoView({ behavior: "smooth" });
+            aria-hidden="true"
+            className="pointer-events-none absolute -left-28 sm:-left-20 lg:-left-12 top-1/2 -translate-y-1/2 z-0 hidden sm:block w-72 sm:w-96 lg:w-[480px] h-[340px] sm:h-[420px] lg:h-[520px] opacity-75 dark:opacity-40 mix-blend-multiply dark:mix-blend-screen transition-opacity duration-700 select-none"
+            style={{
+              maskImage:
+                "radial-gradient(ellipse 70% 65% at 45% 50%, black 25%, transparent 75%)",
+              WebkitMaskImage:
+                "radial-gradient(ellipse 70% 65% at 45% 50%, black 25%, transparent 75%)",
             }}
-            className="bg-white border border-[#E4E6DE] rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-xs hover:border-[#CDCBC5] transition-all cursor-pointer group"
           >
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-[#F4F5EF] flex items-center justify-center text-[#373A36] mb-4 sm:mb-5 group-hover:bg-[#F3F4EF] transition-colors">
-                <FileText className="w-5 h-5 text-[#5C5C57]" />
-              </div>
-              <h3 className="text-base sm:text-lg font-bold text-[#252A23] mb-1.5 sm:mb-2">Summarize</h3>
-              <p className="text-xs text-[#74786F] leading-relaxed">
-                Extract the key points. Turn long reads into a clear, useful
-                overview.
-              </p>
-            </div>
-
-            <div className="mt-8 sm:mt-12 pt-4 sm:pt-5 border-t border-[#F0EFEA]">
-              <span className="text-[10px] font-bold tracking-wider text-[#AFB6A7] uppercase block mb-1.5">
-                Less scrolling, more signal
-              </span>
-              <p className="text-xs font-semibold text-[#252A23] mb-2 sm:mb-3">
-                The essentials, without the extra.
-              </p>
-              <span className="text-[11px] text-[#80807A]">
-                Meeting notes → Key takeaways
-              </span>
+            <div className="w-full h-full animate-caustic-drift-left relative">
+              <img
+                src="/design-assets/artwork/caustic-glass-artwork.jpeg"
+                alt=""
+                className="w-full h-full object-cover object-left"
+                loading="eager"
+                decoding="async"
+              />
             </div>
           </div>
 
-          {/* Card 2: Rewrite */}
+          {/* Right Decorative Ambient Artwork */}
           <div
-            onClick={() => {
-              handleSelectTool("refine");
-              const el = document.getElementById("workspace");
-              el?.scrollIntoView({ behavior: "smooth" });
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-28 sm:-right-20 lg:-right-12 top-1/2 -translate-y-1/2 z-0 hidden sm:block w-72 sm:w-96 lg:w-[480px] h-[340px] sm:h-[420px] lg:h-[520px] opacity-75 dark:opacity-40 mix-blend-multiply dark:mix-blend-screen transition-opacity duration-700 select-none"
+            style={{
+              maskImage:
+                "radial-gradient(ellipse 70% 65% at 55% 50%, black 25%, transparent 75%)",
+              WebkitMaskImage:
+                "radial-gradient(ellipse 70% 65% at 55% 50%, black 25%, transparent 75%)",
             }}
-            className="bg-white border border-[#E4E6DE] rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-xs hover:border-[#CDCBC5] transition-all cursor-pointer group"
           >
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-[#F4F5EF] flex items-center justify-center text-[#373A36] mb-4 sm:mb-5 group-hover:bg-[#F3F4EF] transition-colors">
-                <PenTool className="w-5 h-5 text-[#5C5C57]" />
-              </div>
-              <h3 className="text-base sm:text-lg font-bold text-[#252A23] mb-1.5 sm:mb-2">Rewrite</h3>
-              <p className="text-xs text-[#74786F] leading-relaxed">
-                Improve clarity and flow while keeping what makes your writing
-                yours.
-              </p>
-            </div>
-
-            <div className="mt-8 sm:mt-12 pt-4 sm:pt-5 border-t border-[#F0EFEA]">
-              <span className="text-[10px] font-bold tracking-wider text-[#AFB6A7] uppercase block mb-1.5">
-                Same idea, better flow
-              </span>
-              <p className="text-xs font-semibold text-[#252A23] mb-2 sm:mb-3">
-                Find the words you meant to use.
-              </p>
-              <span className="text-[11px] text-[#80807A]">
-                Rough draft → Polished copy
-              </span>
+            <div className="w-full h-full animate-caustic-drift-right relative">
+              <img
+                src="/design-assets/artwork/caustic-glass-artwork.jpeg"
+                alt=""
+                className="w-full h-full object-cover object-right"
+                loading="eager"
+                decoding="async"
+              />
             </div>
           </div>
 
-          {/* Card 3: Simplify */}
-          <div
-            onClick={() => {
-              handleSelectTool("simplify");
-              const el = document.getElementById("workspace");
-              el?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="bg-white border border-[#E4E6DE] rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-xs hover:border-[#CDCBC5] transition-all cursor-pointer group"
-          >
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-[#F4F5EF] flex items-center justify-center text-[#373A36] mb-4 sm:mb-5 group-hover:bg-[#F3F4EF] transition-colors">
-                <Sliders className="w-5 h-5 text-[#5C5C57]" />
-              </div>
-              <h3 className="text-base sm:text-lg font-bold text-[#252A23] mb-1.5 sm:mb-2">Simplify</h3>
-              <p className="text-xs text-[#74786F] leading-relaxed">
-                Make complex text easier to understand. Keep the meaning, lose the
-                jargon.
-              </p>
-            </div>
-
-            <div className="mt-8 sm:mt-12 pt-4 sm:pt-5 border-t border-[#F0EFEA]">
-              <span className="text-[10px] font-bold tracking-wider text-[#AFB6A7] uppercase block mb-1.5">
-                Plain words, please
-              </span>
-              <p className="text-xs font-semibold text-[#252A23] mb-2 sm:mb-3">
-                Big ideas. A little less complex.
-              </p>
-              <span className="text-[11px] text-[#80807A]">
-                Technical text → Plain language
-              </span>
-            </div>
-          </div>
-
-          {/* Card 4: Social Post */}
-          <div
-            onClick={() => {
-              handleSelectTool("repurpose");
-              const el = document.getElementById("workspace");
-              el?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="bg-white border border-[#E4E6DE] rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-xs hover:border-[#CDCBC5] transition-all cursor-pointer group"
-          >
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-[#F4F5EF] flex items-center justify-center text-[#373A36] mb-4 sm:mb-5 group-hover:bg-[#F3F4EF] transition-colors">
-                <MessageSquare className="w-5 h-5 text-[#5C5C57]" />
-              </div>
-              <h3 className="text-base sm:text-lg font-bold text-[#252A23] mb-1.5 sm:mb-2">Social Post</h3>
-              <p className="text-xs text-[#74786F] leading-relaxed">
-                Shape your ideas into social-ready content that gets to the point.
-              </p>
-            </div>
-
-            <div className="mt-8 sm:mt-12 pt-4 sm:pt-5 border-t border-[#F0EFEA]">
-              <span className="text-[10px] font-bold tracking-wider text-[#AFB6A7] uppercase block mb-1.5">
-                Ready for the feed
-              </span>
-              <p className="text-xs font-semibold text-[#252A23] mb-2 sm:mb-3">
-                From a good idea to a great post.
-              </p>
-              <span className="text-[11px] text-[#80807A]">
-                Draft idea → Social-ready post
-              </span>
-            </div>
+          {/* Foreground Carousel */}
+          <div className="relative z-10 w-full">
+            <ToolkitCarousel onSelectTool={handleSelectTool} />
           </div>
         </div>
       </section>
