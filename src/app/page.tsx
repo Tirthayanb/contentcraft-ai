@@ -24,7 +24,6 @@ import { BrandLogo } from "@/components/brand/brand-logo";
 import { Container } from "@/components/layout/container";
 import { ToolkitCarousel } from "@/components/landing/toolkit-carousel";
 import { KineticHeroHeadline } from "@/components/landing/hero-headline";
-import { HeroVideoBackground } from "@/components/landing/hero-video-background";
 import { BrandPhilosophySection } from "@/components/landing/brand-philosophy-section";
 
 type ToolType = "write" | "repurpose" | "refine" | "simplify";
@@ -433,7 +432,6 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden w-full min-h-[100svh] bg-[#FAFAF8] text-center">
-        <HeroVideoBackground prefersReducedMotion={prefersReducedMotion} />
         <div className="relative z-30 mx-auto max-w-5xl px-4 sm:px-6 pt-10 sm:pt-16 md:pt-24 pb-12 sm:pb-16 text-center">
           {/* Pill Badge */}
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F3F4EF] text-[#74786F] text-xs font-medium mb-6 sm:mb-8">
@@ -472,7 +470,8 @@ export default function Home() {
         </div>
 
         {/* Interactive Workspace / Tool Preview */}
-        <div id="workspace" className="mt-10 sm:mt-14 max-w-4xl mx-auto text-left scroll-mt-24 sm:scroll-mt-28 relative">
+        <div id="workspace" className="mt-10 sm:mt-14 w-full text-left scroll-mt-24 sm:scroll-mt-28 relative bg-[#FAFAF8]">
+          <div className="max-w-4xl mx-auto">
           {/* Ambient Decorative Flanking Artwork (Left: sage-olive refractions) */}
           <div
             aria-hidden="true"
@@ -901,12 +900,13 @@ export default function Home() {
           </p>
         </div>
         </div>
+        </div>
       </section>
 
       {/* The Toolkit Section */}
       <section
         id="features"
-        className="py-14 sm:py-20 border-t border-[#F3F4EF] scroll-mt-20 overflow-hidden w-full"
+        className="py-14 sm:py-20 border-t border-[#F3F4EF] scroll-mt-20 overflow-hidden w-full isolate"
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 mb-8 sm:mb-12">
           <span className="text-xs font-bold tracking-wider text-[#8A8983] uppercase block mb-2 sm:mb-3">
