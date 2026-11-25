@@ -14,8 +14,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Layers,
-  Clock,
-  Layout,
   RotateCw,
   Menu,
   X,
@@ -25,6 +23,9 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { BrandLogo } from "@/components/brand/brand-logo";
 import { Container } from "@/components/layout/container";
 import { ToolkitCarousel } from "@/components/landing/toolkit-carousel";
+import { KineticHeroHeadline } from "@/components/landing/hero-headline";
+import { HeroVideoBackground } from "@/components/landing/hero-video-background";
+import { BrandPhilosophySection } from "@/components/landing/brand-philosophy-section";
 
 type ToolType = "write" | "repurpose" | "refine" | "simplify";
 
@@ -431,17 +432,17 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-10 sm:pt-16 md:pt-20 pb-12 sm:pb-16 px-4 sm:px-6 max-w-5xl mx-auto text-center">
-        {/* Pill Badge */}
+      <section className="relative overflow-hidden w-full min-h-[100svh] bg-[#FAFAF8] text-center">
+        <HeroVideoBackground prefersReducedMotion={prefersReducedMotion} />
+        <div className="relative z-30 mx-auto max-w-5xl px-4 sm:px-6 pt-10 sm:pt-16 md:pt-24 pb-12 sm:pb-16 text-center">
+          {/* Pill Badge */}
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F3F4EF] text-[#74786F] text-xs font-medium mb-6 sm:mb-8">
           <span className="w-1.5 h-1.5 rounded-full bg-[#373A36]" />
           A little clarity goes a long way
         </div>
 
         {/* Main Title */}
-        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#252A23] max-w-4xl mx-auto leading-[1.12]">
-          Your ideas, better expressed.
-        </h1>
+        <KineticHeroHeadline />
 
         {/* Subtitle */}
         <p className="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg text-[#74786F] max-w-xl mx-auto font-normal leading-relaxed">
@@ -899,6 +900,7 @@ export default function Home() {
             One draft. Four ways forward. Your voice, always.
           </p>
         </div>
+        </div>
       </section>
 
       {/* The Toolkit Section */}
@@ -1034,63 +1036,7 @@ export default function Home() {
       </section>
 
       {/* Dark Value Proposition Section */}
-      <section className="bg-[#252A23] text-white py-14 sm:py-20 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 lg:gap-8 items-start">
-          {/* Left Title Column */}
-          <div className="lg:col-span-5">
-            <span className="text-[11px] font-bold tracking-wider text-[#AFB6A7] uppercase block mb-3 sm:mb-4">
-              Less noise. More clarity.
-            </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-tight">
-              A calmer place to do your best writing.
-            </h2>
-            <p className="mt-4 sm:mt-6 text-sm text-[#AFB6A7] leading-relaxed max-w-md">
-              Thoughtful tools for the everyday work of getting your ideas across.
-            </p>
-          </div>
-
-          {/* Right Features 2x2 Grid */}
-          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-x-8 sm:gap-x-10 gap-y-8 sm:gap-y-12">
-            {/* Value 1 */}
-            <div className="border-t border-[#383E36] pt-5 sm:pt-6 space-y-2 sm:space-y-2.5">
-              <span className="text-lg text-[#E0E2DC] block">T</span>
-              <h3 className="text-sm font-bold text-white">Clearer writing</h3>
-              <p className="text-xs text-[#AFB6A7] leading-relaxed">
-                Say what you mean with words that are easier to read and understand.
-              </p>
-            </div>
-
-            {/* Value 2 */}
-            <div className="border-t border-[#383E36] pt-5 sm:pt-6 space-y-2 sm:space-y-2.5">
-              <PenTool className="w-4 h-4 text-[#E0E2DC]" />
-              <h3 className="text-sm font-bold text-white">Efficient editing</h3>
-              <p className="text-xs text-[#AFB6A7] leading-relaxed">
-                Spend less time reworking sentences and more time moving ideas
-                forward.
-              </p>
-            </div>
-
-            {/* Value 3 */}
-            <div className="border-t border-[#383E36] pt-5 sm:pt-6 space-y-2 sm:space-y-2.5">
-              <Clock className="w-4 h-4 text-[#E0E2DC]" />
-              <h3 className="text-sm font-bold text-white">Content history</h3>
-              <p className="text-xs text-[#AFB6A7] leading-relaxed">
-                Return to past results and pick up the ideas worth keeping.
-              </p>
-            </div>
-
-            {/* Value 4 */}
-            <div className="border-t border-[#383E36] pt-5 sm:pt-6 space-y-2 sm:space-y-2.5">
-              <Layout className="w-4 h-4 text-[#E0E2DC]" />
-              <h3 className="text-sm font-bold text-white">Focused workspace</h3>
-              <p className="text-xs text-[#AFB6A7] leading-relaxed">
-                Just the text, the tools, and room to think. Nothing getting in the
-                way.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <BrandPhilosophySection />
 
       {/* Bottom CTA Banner */}
       <section className="py-16 sm:py-24 px-4 sm:px-6 text-center max-w-4xl mx-auto">
